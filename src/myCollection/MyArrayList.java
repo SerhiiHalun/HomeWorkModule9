@@ -31,6 +31,9 @@ public class MyArrayList<E>{
     }
 
     public E get(int index){
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return (E)insideArray[index];
     }
     private Object[] grow(){
@@ -48,22 +51,24 @@ public class MyArrayList<E>{
         }
     }
     public boolean remove(Object o) {
-        E[] newArray  = (E[]) new Object[insideArray.length-2];
         int index = 0;
         int i = 0;
-        for (Object temp: insideArray){
-            if(temp == null){
+        for (Object temp : insideArray) {
+            if (temp == null) {
                 break;
             }
-            if(!temp.equals(o)&&i==0){
+            if (!temp.equals(o) && i == 0) {
                 i++;
                 continue;
             }
-            newArray[index] = (E) temp;
+            insideArray[index] = (E) temp;
             index++;
         }
-        insideArray = Arrays.copyOf(newArray,newArray.length);
-
+        if (i == 0) {
+            return false;
+        }
+        size--;
+        insideArray = Arrays.copyOf(insideArray, insideArray.length - 1);
         return true;
     }
     public void clear() {
